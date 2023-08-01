@@ -1,5 +1,5 @@
 use crate::registers::*;
-use crate::instructions::Instructions;
+use crate::instructions;
 use crate::memory::Memory;
 
 use crate::log as console_log;
@@ -47,17 +47,17 @@ impl LR35902 {
     fn execute(&mut self, instruction: u8) {
         console_log(format!("Executing {instruction:?}").as_str());
         let cycles_passed = match instruction {
-            Instructions::NO_OP => 1,
+            instructions::NO_OP => 1,
             // ...
             // Instruction::LoadStackPointerIntoMemory(v) => { todo!(); },
             // ...
-            Instructions::LD_C_d8 => {
+            instructions::LD_C_d8 => {
                 let arg = self.next_byte();
                 self.load_immediate8(TargetRegister8::C, arg)
             },
             // ...
-            Instructions::ADD_A_B => self.add(TargetRegister8::B),
-            Instructions::ADD_A_C => self.add(TargetRegister8::C),
+            instructions::ADD_A_B => self.add(TargetRegister8::B),
+            instructions::ADD_A_C => self.add(TargetRegister8::C),
             // ...
             _ => 1,
         };
@@ -114,10 +114,10 @@ mod tests {
     #[test]
     fn test() {
         let program: Vec<u8> = vec![
-            Instructions::NO_OP,
-            Instructions::ADD_A_B,
-            Instructions::LD_C_d8, 0x12,
-            Instructions::ADD_A_C,
+            instructions::NO_OP,
+            instructions::ADD_A_B,
+            instructions::LD_C_d8, 0x12,
+            instructions::ADD_A_C,
         ];
         let mut cpu = LR35902::open(program);
         cpu.run_n(2);
