@@ -11,13 +11,13 @@ pub struct Registers {
     pub sp: u16,
 }
 
-#[derive(Clone, Debug)]
-pub enum TargetRegister8 {
+#[derive(Copy, Clone, Debug)]
+pub enum Register8 {
     A, B, C, D, E, F, H, L
 }
 
-#[derive(Clone, Debug)]
-pub enum TargetRegister16 {
+#[derive(Copy, Clone, Debug)]
+pub enum Register16 {
     AF, BC, DE, HL, SP, PC
 }
 
@@ -43,51 +43,51 @@ impl Registers {
         }
     }
 
-    pub fn set8(&mut self, target: TargetRegister8, value: u8)  {
-        match target {
-            TargetRegister8::A => { self.af.0 = value; }
-            TargetRegister8::B => { self.bc.0 = value; }
-            TargetRegister8::C => { self.bc.1 = value; }
-            TargetRegister8::D => { self.de.0 = value; }
-            TargetRegister8::E => { self.de.1 = value; }
-            TargetRegister8::F => { self.af.1 = value; }
-            TargetRegister8::H => { self.hl.0 = value; }
-            TargetRegister8::L => { self.hl.1 = value; }
+    pub fn set8(&mut self, reg: Register8, value: u8)  {
+        match reg {
+            Register8::A => { self.af.0 = value; }
+            Register8::B => { self.bc.0 = value; }
+            Register8::C => { self.bc.1 = value; }
+            Register8::D => { self.de.0 = value; }
+            Register8::E => { self.de.1 = value; }
+            Register8::F => { self.af.1 = value; }
+            Register8::H => { self.hl.0 = value; }
+            Register8::L => { self.hl.1 = value; }
         }
     }
 
-    pub fn get8(&self, target: TargetRegister8) -> u8 {
-        match target {
-            TargetRegister8::A => { self.af.0 }
-            TargetRegister8::B => { self.bc.0 }
-            TargetRegister8::C => { self.bc.1 }
-            TargetRegister8::D => { self.de.0 }
-            TargetRegister8::E => { self.de.1 }
-            TargetRegister8::F => { self.af.1 }
-            TargetRegister8::H => { self.hl.0 }
-            TargetRegister8::L => { self.hl.1 }
+    pub fn get8(&self, reg: Register8) -> u8 {
+        match reg {
+            Register8::A => { self.af.0 }
+            Register8::B => { self.bc.0 }
+            Register8::C => { self.bc.1 }
+            Register8::D => { self.de.0 }
+            Register8::E => { self.de.1 }
+            Register8::F => { self.af.1 }
+            Register8::H => { self.hl.0 }
+            Register8::L => { self.hl.1 }
         }
     }
 
-    pub fn set16(&mut self, target: TargetRegister16, value: u16)  {
-        match target {
-            TargetRegister16::AF => { self.af.set16(value); }
-            TargetRegister16::BC => { self.bc.set16(value); }
-            TargetRegister16::DE => { self.de.set16(value); }
-            TargetRegister16::HL => { self.hl.set16(value); }
-            TargetRegister16::PC => { self.pc = value; },
-            TargetRegister16::SP => { self.sp = value; },
+    pub fn set16(&mut self, reg: Register16, value: u16)  {
+        match reg {
+            Register16::AF => { self.af.set16(value); }
+            Register16::BC => { self.bc.set16(value); }
+            Register16::DE => { self.de.set16(value); }
+            Register16::HL => { self.hl.set16(value); }
+            Register16::PC => { self.pc = value; },
+            Register16::SP => { self.sp = value; },
         }
     }
 
-    pub fn get16(&mut self, target: TargetRegister16) -> u16  {
-        match target {
-            TargetRegister16::AF => { self.af.get16() }
-            TargetRegister16::BC => { self.bc.get16() }
-            TargetRegister16::DE => { self.de.get16() }
-            TargetRegister16::HL => { self.hl.get16() }
-            TargetRegister16::PC => { self.pc },
-            TargetRegister16::SP => { self.sp },
+    pub fn get16(&mut self, reg: Register16) -> u16  {
+        match reg {
+            Register16::AF => { self.af.get16() }
+            Register16::BC => { self.bc.get16() }
+            Register16::DE => { self.de.get16() }
+            Register16::HL => { self.hl.get16() }
+            Register16::PC => { self.pc },
+            Register16::SP => { self.sp },
         }
     }
 
