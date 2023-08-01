@@ -1,5 +1,5 @@
 use crate::registers::*;
-use crate::instructions::Instruction;
+use crate::instructions::Instructions;
 use crate::memory::Memory;
 
 use crate::log as console_log;
@@ -11,42 +11,53 @@ pub struct LR35902 {
     pub cycle: u64,
     pub registers: Registers,
     pub memory: Memory,
-    pub program: Vec<Instruction>,
 }
 
 impl LR35902 {
     pub fn open(rom: Vec<u8>) -> Self {
         console_log("Initialising CPU");
+        let mut memory = Memory::new();
+        for (i, value) in rom.into_iter().enumerate() {
+            let addr = (i + 256) as u16;
+            memory.set8(addr, value);
+        }
         Self {
             cycle: 0,
             registers: Registers::new(),
-            memory: Memory::new(),
-            program: Instruction::decode_bytes(rom),
+            memory: memory,
         }
     }
 
-    fn fetch(&mut self) -> Option<Instruction> {
-        if (self.registers.pc as usize) >= self.program.len() {
-            None
-        }
-        else {
-            let inst = self.program[self.registers.pc as usize].clone();
-            self.registers.pc = self.registers.pc.wrapping_add(1);
-            Some(inst)
-        }
+    fn next_byte(&mut self) -> u8 {
+        let byte = self.memory[self.registers.pc];
+        self.registers.pc = self.registers.pc.wrapping_add(1);
+        byte
     }
 
-    fn execute(&mut self, instruction: Instruction) {
+    fn next_word(&mut self) -> u16 {
+        let lsb = self.next_byte() as u16;
+        let msb = self.next_byte() as u16;
+        (msb << 8) | lsb
+    }
+
+    fn fetch(&mut self) -> u8 {
+        self.next_byte()
+    }
+
+    fn execute(&mut self, instruction: u8) {
         console_log(format!("Executing {instruction:?}").as_str());
         let cycles_passed = match instruction {
-            Instruction::NoOperation => 1,
+            Instructions::NO_OP => 1,
             // ...
-            Instruction::LoadStackPointerIntoMemory(v) => { todo!(); },
+            // Instruction::LoadStackPointerIntoMemory(v) => { todo!(); },
             // ...
-            Instruction::LoadIntoC(v) => self.load_immediate8(TargetRegister8::C, v),
+            Instructions::LD_C_d8 => {
+                let arg = self.next_byte();
+                self.load_immediate8(TargetRegister8::C, arg)
+            },
             // ...
-            Instruction::AddBToA => self.add(TargetRegister8::B),
-            Instruction::AddCToA => self.add(TargetRegister8::C),
+            Instructions::ADD_A_B => self.add(TargetRegister8::B),
+            Instructions::ADD_A_C => self.add(TargetRegister8::C),
             // ...
             _ => 1,
         };
@@ -55,22 +66,17 @@ impl LR35902 {
     }
 
     pub fn run(&mut self) {
-        console_log("Running program");
-        while let Some(instruction) = self.fetch() {
+        loop {
+            let instruction = self.fetch();
             self.execute(instruction);
         }
-        console_log("Done!");
     }
 
-    fn run_n(&mut self, v: usize) {
-        console_log(format!("Running instructions {} to {} of {} of program", self.registers.pc, self.registers.pc as usize + v, self.program.len()).as_str());
+    fn run_n(&mut self, v: u16) {
+        console_log(format!("Running instructions {} to {} of program", self.registers.pc, self.registers.pc.wrapping_add(v)).as_str());
         for _ in 0..v {
-            if let Some(instruction) = self.fetch() {
-                self.execute(instruction);
-            }
-            else  {
-                panic!();
-            }
+            let instruction = self.fetch();
+            self.execute(instruction);
         }
     }
     
@@ -107,31 +113,16 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut program: Vec<u8> = (0..256).map(|_| { 0x00}).collect();
-        program.extend(vec![
-
-            0x00, // 0. NOOP
-
-            0x80, // 1. ADD A B
-
-            0x0E, // 2. LD C, 8
-            0x12,
-
-            0x81, // 3. ADD A C
-
-        ].into_iter());
+        let program: Vec<u8> = vec![
+            Instructions::NO_OP,
+            Instructions::ADD_A_B,
+            Instructions::LD_C_d8, 0x12,
+            Instructions::ADD_A_C,
+        ];
         let mut cpu = LR35902::open(program);
-        println!("{:?} // {} -> {:?}", cpu.program, cpu.registers.pc, cpu.program[cpu.registers.pc as usize]);
-
-        cpu.run_n(1);
-        println!("// {} -> {:?}", cpu.registers.pc, cpu.program[cpu.registers.pc as usize]);
-        cpu.run_n(1);
-        println!("// {} -> {:?}", cpu.registers.pc, cpu.program[cpu.registers.pc as usize]);
+        cpu.run_n(2);
         assert_eq!(cpu.registers.af.0, 0x01);
-        cpu.run_n(1);
-        println!("// {} -> {:?}", cpu.registers.pc, cpu.program[cpu.registers.pc as usize]);
-        cpu.run_n(1);
-        println!("// {}", cpu.registers.pc);
+        cpu.run_n(2);
         assert_eq!(cpu.registers.get8(TargetRegister8::C), 0x12);
         assert_eq!(cpu.registers.af.0, 0x13);
     }
