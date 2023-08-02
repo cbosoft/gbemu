@@ -64,6 +64,10 @@ pub const ADD_A_C: u8 = 0x81;
 
 // TODO ...
 
+pub const PREFIX: u8 = 0xCB;
+
+// TODO ...
+
 /*
     0xF8 LD HL, SP+s8
     B2 C3

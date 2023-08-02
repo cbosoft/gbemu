@@ -50,6 +50,7 @@ impl LR35902 {
 
             instructions::NO_OP => 1,
             instructions::STOP => todo!(),
+            instructions::PREFIX => self.execute_prefixed(),
 
             instructions::JR_s8 => self.jump_relative(),
             instructions::JR_Z_s8 => self.conditional_jump_relative(Flag::Zero),
@@ -102,6 +103,13 @@ impl LR35902 {
         };
 
         self.cycle += cycles_passed;
+    }
+
+    fn execute_prefixed(&mut self) -> u64 {
+        let instruction = self.next_byte();
+        match instruction {
+            0x00..=0xFF => todo!()
+        }
     }
 
     pub fn run(&mut self) {
