@@ -87,11 +87,11 @@ impl LR35902 {
 
             instructions::LD_a16_SP => todo!(),
 
-            instructions::RLCA => todo!(),
-            instructions::RRCA => todo!(),
+            instructions::RLCA => self.rotate_left_circular(Register8::A),
+            instructions::RRCA => self.rotate_right_circular(Register8::A),
 
-            instructions::RLA => todo!(),
-            instructions::RRA => todo!(),
+            instructions::RLA => self.rotate_left(Register8::A),
+            instructions::RRA => self.rotate_right(Register8::A),
 
             instructions::ADD_A_B => self.add(Register8::B),
             instructions::ADD_A_C => self.add(Register8::C),
@@ -237,6 +237,44 @@ impl LR35902 {
             2
         }
 
+    }
+
+    fn rotate_left_circular(&mut self, reg: Register8) -> u64 {
+        let v = self.registers.get8(reg);
+        let c = (v & 0b1000_0000) >> 8;
+        let v = (v << 1) | c;
+        self.registers.set_flags(false, false, false, c == 1);
+        self.registers.set8(reg, v);
+        1
+    }
+
+    fn rotate_left(&mut self, reg: Register8) -> u64 {
+        let v = self.registers.get8(reg);
+        let new_carry = (v & 0b1000_0000) >> 8;
+        let new_lsb = self.registers.get_flag(Flag::Carry) as u8;
+        let v = (v << 1) | new_lsb;
+        self.registers.set_flags(false, false, false, new_carry == 1);
+        self.registers.set8(reg, v);
+        1
+    }
+
+    fn rotate_right_circular(&mut self, reg: Register8) -> u64 {
+        let v = self.registers.get8(reg);
+        let c = v & 0b0000_0001;
+        let v = (v >> 1) | (c << 8);
+        self.registers.set_flags(false, false, false, c == 1);
+        self.registers.set8(reg, v);
+        1
+    }
+
+    fn rotate_right(&mut self, reg: Register8) -> u64 {
+        let v = self.registers.get8(reg);
+        let new_carry = v & 0b0000_0001;
+        let new_msb = self.registers.get_flag(Flag::Carry) as u8;
+        let v = (v << 1) | (new_msb << 8);
+        self.registers.set_flags(false, false, false, new_carry == 1);
+        self.registers.set8(reg, v);
+        1
     }
 }
 
