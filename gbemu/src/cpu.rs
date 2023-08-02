@@ -60,16 +60,16 @@ impl LR35902 {
             instructions::INC_D => self.increment8(Register8::D),
             instructions::INC_E => self.increment8(Register8::E),
 
-            instructions::DEC_B => todo!(),
-            instructions::DEC_C => todo!(),
-            instructions::DEC_D => todo!(),
-            instructions::DEC_E => todo!(),
+            instructions::DEC_B => self.decrement8(Register8::B),
+            instructions::DEC_C => self.decrement8(Register8::C),
+            instructions::DEC_D => self.decrement8(Register8::D),
+            instructions::DEC_E => self.decrement8(Register8::E),
 
             instructions::INC_BC => self.increment16(Register16::BC),
             instructions::INC_DE => self.increment16(Register16::DE),
 
-            instructions::DEC_BC => todo!(),
-            instructions::DEC_DE => todo!(),
+            instructions::DEC_BC => self.decrement16(Register16::BC),
+            instructions::DEC_DE => self.decrement16(Register16::DE),
 
             instructions::LD_B_d8 => self.load_byte_to_reg(Register8::B),
             instructions::LD_C_d8 => self.load_byte_to_reg(Register8::C),
@@ -213,6 +213,97 @@ impl LR35902 {
         self.registers.set_flags(
             a == 0,
             false,
+            half_carry,
+            carry,
+        );
+
+        2
+    }
+
+
+
+    fn decrement8(&mut self, reg: Register8) -> u64 {
+        let v = self.registers.get8(reg);
+
+        let half_carry = (v & 0x0F) - 1 > 0x0F;
+        let (v, carry) = v.overflowing_sub(1);
+        self.registers.set8(reg, v);
+
+        self.registers.set_flags(
+            v == 0,
+            true,
+            half_carry,
+            carry,
+        );
+
+        1
+    }
+
+    fn decrement16(&mut self, reg: Register16) -> u64 {
+        let v = self.registers.get16(reg);
+        const BIT_11_MASK: u16 = 0b0000_1111_1111_1111;
+        let half_carry: bool = (v & BIT_11_MASK) - 1 > BIT_11_MASK;
+        let (v, carry) = v.overflowing_sub(1);
+        self.registers.set16(reg, v);
+
+        self.registers.set_flags(
+            v == 0,
+            true,
+            half_carry,
+            carry,
+        );
+
+        1
+    }
+
+    fn sub8(&mut self, reg: Register8) -> u64 {
+        let a = self.registers.af.0;
+        let v = self.registers.get8(reg);
+
+        let half_carry = (a & 0x0F) - (v & 0x0F) > 0x0F;
+        let (a, carry) = a.overflowing_sub(v);
+        self.registers.af.0 = a;
+
+        self.registers.set_flags(
+            v == 0,
+            true,
+            half_carry,
+            carry,
+        );
+
+        1
+    }
+
+    fn sub_mem_at_reg(&mut self, reg: Register16) -> u64 {
+        let addr = self.registers.get16(reg);
+        let a = self.registers.af.0;
+        let v = self.memory[addr];
+
+        let half_carry = (a & 0x0F) - (v & 0x0F) > 0x0F;
+        let (a, carry) = a.overflowing_sub(v);
+        self.registers.af.0 = a;
+
+        self.registers.set_flags(
+            v == 0,
+            true,
+            half_carry,
+            carry,
+        );
+
+        2
+    }
+
+    fn sub_byte(&mut self) -> u64 {
+        let a = self.registers.af.0;
+        let v = self.next_byte();
+
+        let half_carry = (a & 0x0F) - (v & 0x0F) > 0x0F;
+        let (a, carry) = a.overflowing_sub(v);
+        self.registers.af.0 = a;
+
+        self.registers.set_flags(
+            v == 0,
+            true,
             half_carry,
             carry,
         );
