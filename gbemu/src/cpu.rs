@@ -85,7 +85,7 @@ impl LR35902 {
             instructions::LD_aBC_A => self.load_reg_to_mem_at_reg(Register16::BC, Register8::A),
             instructions::LD_aDE_A => self.load_reg_to_mem_at_reg(Register16::DE, Register8::A),
 
-            instructions::LD_a16_SP => todo!(),
+            instructions::LD_a16_SP => self.load_reg16_to_mem(Register16::SP),
 
             instructions::RLCA => self.rotate_left_circular(Register8::A),
             instructions::RRCA => self.rotate_right_circular(Register8::A),
@@ -139,6 +139,14 @@ impl LR35902 {
         let value = self.registers.get8(src);
         self.memory[addr] = value;
         2
+    }
+
+    fn load_reg16_to_mem(&mut self, src: Register16) -> u64 {
+        let addr = self.next_word();
+        let (lsb, msb) = self.registers.get8_8(src);
+        self.memory[addr] = lsb;
+        self.memory[addr + 1] = msb;
+        5
     }
 
     fn load_mem_at_reg_to_reg(&mut self, dest: Register8, src: Register16) -> u64 {
