@@ -150,10 +150,10 @@ impl LR35902 {
 
     fn increment8(&mut self, reg: Register8) -> u64 {
         let v = self.registers.get8(reg);
+
+        let half_carry = (v & 0x0F) + 1 > 0x0F;
         let (v, carry) = v.overflowing_add(1);
         self.registers.set8(reg, v);
-
-        let half_carry: bool = (v & 0xF) + (1 & 0xF) > 0xF;
 
         self.registers.set_flags(
             v == 0,
@@ -167,17 +167,17 @@ impl LR35902 {
 
     fn increment16(&mut self, reg: Register16) -> u64 {
         let v = self.registers.get16(reg);
+        const BIT_11_MASK: u16 = 0b0000_1111_1111_1111;
+        let half_carry: bool = (v & BIT_11_MASK) + 1 > BIT_11_MASK;
         let (v, carry) = v.overflowing_add(1);
         self.registers.set16(reg, v);
 
-        let half_carry: bool = (v & 0xF) + (1 & 0xF) > 0xF;
-
-        // self.registers.set_flags(
-        //     v == 0,
-        //     false,
-        //     half_carry,
-        //     carry,
-        // );
+        self.registers.set_flags(
+            v == 0,
+            false,
+            half_carry,
+            carry,
+        );
 
         1
     }
@@ -185,10 +185,9 @@ impl LR35902 {
     fn add(&mut self, reg: Register8) -> u64 {
         let a = self.registers.af.0;
         let v = self.registers.get8(reg);
+        let half_carry = (a & 0x0F) + (v & 0x0F) > 0x0F;
         let (a, carry) = a.overflowing_add(v);
         self.registers.af.0 = a;
-
-        let half_carry: bool = (a & 0xF) + (v & 0xF) > 0xF;
 
         self.registers.set_flags(
             a == 0,
@@ -201,12 +200,15 @@ impl LR35902 {
     }
 
     fn add16(&mut self, left: Register16, right: Register16) -> u64 {
+        // 16bit add- halfcarry is from bit11 to 12
         let a = self.registers.get16(left);
         let b = self.registers.get16(right);
+
+        const BIT_11_MASK: u16 = 0b0000_1111_1111_1111;
+        let half_carry: bool = (a & BIT_11_MASK) + (b & BIT_11_MASK) > BIT_11_MASK;
+
         let (a, carry) = a.overflowing_add(b);
         self.registers.set16(left, a);
-
-        let half_carry: bool = (a & 0xF) + (b & 0xF) > 0xF;
 
         self.registers.set_flags(
             a == 0,
