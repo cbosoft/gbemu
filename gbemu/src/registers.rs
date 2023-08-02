@@ -69,6 +69,17 @@ impl Registers {
         }
     }
 
+    pub fn get8_8(&self, reg: Register16) -> (u8, u8) {
+        match reg {
+            Register16::AF => (self.af.0, self.af.1),
+            Register16::BC => (self.bc.0, self.bc.1),
+            Register16::DE => (self.de.0, self.de.1),
+            Register16::HL => (self.hl.0, self.hl.1),
+            Register16::PC => ((self.pc & 255) as u8, (self.pc >> 8) as u8),
+            Register16::SP => ((self.sp & 255) as u8, (self.sp >> 8) as u8),
+        }
+    }
+
     pub fn set16(&mut self, reg: Register16, value: u16)  {
         match reg {
             Register16::AF => { self.af.set16(value); }
