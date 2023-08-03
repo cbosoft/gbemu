@@ -39,10 +39,61 @@ pub const DEC_E: u8 = 0x1D;
 pub const LD_E_d8: u8 = 0x1E;
 pub const RRA: u8 = 0x1F;
 
-// TODO ...
-
+// 0x2*
+pub const JR_NZ_s8: u8 = 0x20;
+pub const LD_HL_d16: u8 = 0x21;
+pub const LD_aHLp_A: u8 = 0x22;
+pub const INC_HL: u8 = 0x23;
+pub const INC_H: u8 = 0x24;
+pub const DEC_H: u8 = 0x25;
+pub const LD_H_d8: u8 = 0x26;
+pub const DAA: u8 = 0x27;
 pub const JR_Z_s8: u8 = 0x28;
+pub const ADD_HL_HL: u8 = 0x29;
+pub const LD_A_aHLp: u8 = 0x2A;
+pub const DEC_HL: u8 = 0x2B;
+pub const INC_L: u8 = 0x2C;
+pub const DEC_L: u8 = 0x2D;
+pub const LD_L_d8: u8 = 0x2E;
+pub const CPL: u8 = 0x2F;
+
+// 0x3*
+pub const JR_NC_s8: u8 = 0x30;
+pub const LD_SP_d16: u8 = 0x31;
+pub const LD_aHLm_A: u8 = 0x32;
+pub const INC_SP: u8 = 0x33;
+pub const INC_aHL: u8 = 0x34;
+pub const DEC_aHL: u8 = 0x35;
+pub const LD_aHL_d8: u8 = 0x36;
+pub const SCF: u8 = 0x37;
 pub const JR_C_s8: u8 = 0x38;
+pub const ADD_HL_SP: u8 = 0x39;
+pub const LD_A_aHLm: u8 = 0x3A;
+pub const DEC_SP: u8 = 0x3B;
+pub const INC_A: u8 = 0x3C;
+pub const DEC_A: u8 = 0x3D;
+pub const LD_A_d8: u8 = 0x3E;
+pub const CCF: u8 = 0x3F;
+
+
+
+// // 0xY*
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xYY;
 
 // TODO ...
 

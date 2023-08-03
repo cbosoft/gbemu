@@ -91,6 +91,10 @@ impl Registers {
         }
     }
 
+    pub fn set8_8(&mut self, reg: Register16, lsb: u8, msb: u8) {
+        self.set16(reg, ((msb as u16) << 8) | (lsb as u16));
+    }
+
     pub fn get16(&mut self, reg: Register16) -> u16  {
         match reg {
             Register16::AF => { self.af.get16() }
