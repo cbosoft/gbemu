@@ -75,25 +75,97 @@ pub const DEC_A: u8 = 0x3D;
 pub const LD_A_d8: u8 = 0x3E;
 pub const CCF: u8 = 0x3F;
 
+// 0x4*
+pub const LD_B_B: u8 = 0x40;
+pub const LD_B_C: u8 = 0x41;
+pub const LD_B_D: u8 = 0x42;
+pub const LD_B_E: u8 = 0x43;
+pub const LD_B_H: u8 = 0x44;
+pub const LD_B_L: u8 = 0x45;
+pub const LD_B_aHL: u8 = 0x46;
+pub const LD_B_A: u8 = 0x47;
+pub const LD_C_B: u8 = 0x48;
+pub const LD_C_C: u8 = 0x49;
+pub const LD_C_D: u8 = 0x4A;
+pub const LD_C_E: u8 = 0x4B;
+pub const LD_C_H: u8 = 0x4C;
+pub const LD_C_L: u8 = 0x4D;
+pub const LD_C_aHL: u8 = 0x4E;
+pub const LD_C_A: u8 = 0x4F;
+
+// 0x5*
+pub const LD_D_B: u8 = 0x50;
+pub const LD_D_C: u8 = 0x51;
+pub const LD_D_D: u8 = 0x52;
+pub const LD_D_E: u8 = 0x53;
+pub const LD_D_H: u8 = 0x54;
+pub const LD_D_L: u8 = 0x55;
+pub const LD_D_aHL: u8 = 0x56;
+pub const LD_D_A: u8 = 0x57;
+pub const LD_E_B: u8 = 0x58;
+pub const LD_E_C: u8 = 0x59;
+pub const LD_E_D: u8 = 0x5A;
+pub const LD_E_E: u8 = 0x5B;
+pub const LD_E_H: u8 = 0x5C;
+pub const LD_E_L: u8 = 0x5D;
+pub const LD_E_aHL: u8 = 0x5E;
+pub const LD_E_A: u8 = 0x5F;
+
+// 0x6*
+pub const LD_H_B: u8 = 0x60;
+pub const LD_H_C: u8 = 0x61;
+pub const LD_H_D: u8 = 0x62;
+pub const LD_H_E: u8 = 0x63;
+pub const LD_H_H: u8 = 0x64;
+pub const LD_H_L: u8 = 0x65;
+pub const LD_H_aHL: u8 = 0x66;
+pub const LD_H_A: u8 = 0x67;
+pub const LD_L_B: u8 = 0x68;
+pub const LD_L_C: u8 = 0x69;
+pub const LD_L_D: u8 = 0x6A;
+pub const LD_L_E: u8 = 0x6B;
+pub const LD_L_H: u8 = 0x6C;
+pub const LD_L_L: u8 = 0x6D;
+pub const LD_L_aHL: u8 = 0x6E;
+pub const LD_L_A: u8 = 0x6F;
+
+// 0x7*
+pub const LD_aHL_B: u8 = 0x70;
+pub const LD_aHL_C: u8 = 0x71;
+pub const LD_aHL_D: u8 = 0x72;
+pub const LD_aHL_E: u8 = 0x73;
+pub const LD_aHL_H: u8 = 0x74;
+pub const LD_aHL_L: u8 = 0x75;
+pub const HALT: u8 = 0x76;
+pub const LD_aHL_A: u8 = 0x77;
+pub const LD_A_B: u8 = 0x78;
+pub const LD_A_C: u8 = 0x79;
+pub const LD_A_D: u8 = 0x7A;
+pub const LD_A_E: u8 = 0x7B;
+pub const LD_A_H: u8 = 0x7C;
+pub const LD_A_L: u8 = 0x7D;
+pub const LD_A_aHL: u8 = 0x7E;
+pub const LD_A_A: u8 = 0x7F;
+
 
 
 // // 0xY*
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
-// pub const XX: u8 = 0xYY;
+// pub const XX: u8 = 0xY0;
+// pub const XX: u8 = 0xY1;
+// pub const XX: u8 = 0xY2;
+// pub const XX: u8 = 0xY3;
+// pub const XX: u8 = 0xY4;
+// pub const XX: u8 = 0xY5;
+// pub const XX: u8 = 0xY6;
+// pub const XX: u8 = 0xY7;
+// pub const XX: u8 = 0xY8;
+// pub const XX: u8 = 0xY9;
+// pub const XX: u8 = 0xYA;
+// pub const XX: u8 = 0xYB;
+// pub const XX: u8 = 0xYC;
+// pub const XX: u8 = 0xYD;
+// pub const XX: u8 = 0xYE;
+// pub const XX: u8 = 0xYF;
 
 // TODO ...
 

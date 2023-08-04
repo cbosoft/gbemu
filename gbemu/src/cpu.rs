@@ -59,6 +59,7 @@ impl LR35902 {
             instructions::SCF => todo!(),
             instructions::CPL => self.invert_reg8(Register8::A),
             instructions::CCF => self.invert_carry(),
+            instructions::HALT => todo!(),
 
             instructions::JR_s8 => self.jump_relative(),
             instructions::JR_Z_s8 => self.conditional_jump_relative(Flag::Zero, true),
@@ -95,6 +96,62 @@ impl LR35902 {
             instructions::INC_aHL => self.increment_mem_at_reg16(Register16::HL),
             instructions::DEC_aHL => self.decrement_mem_at_reg16(Register16::HL),
 
+            instructions::LD_A_A => self.load_reg_to_reg(Register8::A, Register8::A),
+            instructions::LD_A_B => self.load_reg_to_reg(Register8::A, Register8::B),
+            instructions::LD_A_C => self.load_reg_to_reg(Register8::A, Register8::C),
+            instructions::LD_A_D => self.load_reg_to_reg(Register8::A, Register8::D),
+            instructions::LD_A_E => self.load_reg_to_reg(Register8::A, Register8::E),
+            instructions::LD_A_H => self.load_reg_to_reg(Register8::A, Register8::H),
+            instructions::LD_A_L => self.load_reg_to_reg(Register8::A, Register8::L),
+
+            instructions::LD_B_A => self.load_reg_to_reg(Register8::B, Register8::A),
+            instructions::LD_B_B => self.load_reg_to_reg(Register8::B, Register8::B),
+            instructions::LD_B_C => self.load_reg_to_reg(Register8::B, Register8::C),
+            instructions::LD_B_D => self.load_reg_to_reg(Register8::B, Register8::D),
+            instructions::LD_B_E => self.load_reg_to_reg(Register8::B, Register8::E),
+            instructions::LD_B_H => self.load_reg_to_reg(Register8::B, Register8::H),
+            instructions::LD_B_L => self.load_reg_to_reg(Register8::B, Register8::L),
+
+            instructions::LD_C_A => self.load_reg_to_reg(Register8::C, Register8::A),
+            instructions::LD_C_B => self.load_reg_to_reg(Register8::C, Register8::B),
+            instructions::LD_C_C => self.load_reg_to_reg(Register8::C, Register8::C),
+            instructions::LD_C_D => self.load_reg_to_reg(Register8::C, Register8::D),
+            instructions::LD_C_E => self.load_reg_to_reg(Register8::C, Register8::E),
+            instructions::LD_C_H => self.load_reg_to_reg(Register8::C, Register8::H),
+            instructions::LD_C_L => self.load_reg_to_reg(Register8::C, Register8::L),
+
+            instructions::LD_D_A => self.load_reg_to_reg(Register8::D, Register8::A),
+            instructions::LD_D_B => self.load_reg_to_reg(Register8::D, Register8::B),
+            instructions::LD_D_C => self.load_reg_to_reg(Register8::D, Register8::C),
+            instructions::LD_D_D => self.load_reg_to_reg(Register8::D, Register8::D),
+            instructions::LD_D_E => self.load_reg_to_reg(Register8::D, Register8::E),
+            instructions::LD_D_H => self.load_reg_to_reg(Register8::D, Register8::H),
+            instructions::LD_D_L => self.load_reg_to_reg(Register8::D, Register8::L),
+
+            instructions::LD_E_A => self.load_reg_to_reg(Register8::E, Register8::A),
+            instructions::LD_E_B => self.load_reg_to_reg(Register8::E, Register8::B),
+            instructions::LD_E_C => self.load_reg_to_reg(Register8::E, Register8::C),
+            instructions::LD_E_D => self.load_reg_to_reg(Register8::E, Register8::D),
+            instructions::LD_E_E => self.load_reg_to_reg(Register8::E, Register8::E),
+            instructions::LD_E_H => self.load_reg_to_reg(Register8::E, Register8::H),
+            instructions::LD_E_L => self.load_reg_to_reg(Register8::E, Register8::L),
+
+            instructions::LD_H_A => self.load_reg_to_reg(Register8::H, Register8::A),
+            instructions::LD_H_B => self.load_reg_to_reg(Register8::H, Register8::B),
+            instructions::LD_H_C => self.load_reg_to_reg(Register8::H, Register8::C),
+            instructions::LD_H_D => self.load_reg_to_reg(Register8::H, Register8::D),
+            instructions::LD_H_E => self.load_reg_to_reg(Register8::H, Register8::E),
+            instructions::LD_H_H => self.load_reg_to_reg(Register8::H, Register8::H),
+            instructions::LD_H_L => self.load_reg_to_reg(Register8::H, Register8::L),
+
+            instructions::LD_L_A => self.load_reg_to_reg(Register8::L, Register8::A),
+            instructions::LD_L_B => self.load_reg_to_reg(Register8::L, Register8::B),
+            instructions::LD_L_C => self.load_reg_to_reg(Register8::L, Register8::C),
+            instructions::LD_L_D => self.load_reg_to_reg(Register8::L, Register8::D),
+            instructions::LD_L_E => self.load_reg_to_reg(Register8::L, Register8::E),
+            instructions::LD_L_H => self.load_reg_to_reg(Register8::L, Register8::H),
+            instructions::LD_L_L => self.load_reg_to_reg(Register8::L, Register8::L),
+
             instructions::LD_A_d8 => self.load_byte_to_reg(Register8::A),
             instructions::LD_B_d8 => self.load_byte_to_reg(Register8::B),
             instructions::LD_C_d8 => self.load_byte_to_reg(Register8::C),
@@ -110,11 +167,27 @@ impl LR35902 {
 
             instructions::LD_A_aBC => self.load_mem_at_reg_to_reg(Register8::A, Register16::BC, RegisterAction::Nothing),
             instructions::LD_A_aDE => self.load_mem_at_reg_to_reg(Register8::A, Register16::DE, RegisterAction::Nothing),
+            instructions::LD_A_aHL => self.load_mem_at_reg_to_reg(Register8::A, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_B_aHL => self.load_mem_at_reg_to_reg(Register8::B, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_C_aHL => self.load_mem_at_reg_to_reg(Register8::C, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_D_aHL => self.load_mem_at_reg_to_reg(Register8::D, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_E_aHL => self.load_mem_at_reg_to_reg(Register8::E, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_H_aHL => self.load_mem_at_reg_to_reg(Register8::H, Register16::HL, RegisterAction::Nothing),
+            instructions::LD_L_aHL => self.load_mem_at_reg_to_reg(Register8::L, Register16::HL, RegisterAction::Nothing),
+
             instructions::LD_A_aHLp => self.load_mem_at_reg_to_reg(Register8::A, Register16::HL, RegisterAction::Increment),
             instructions::LD_A_aHLm => self.load_mem_at_reg_to_reg(Register8::A, Register16::HL, RegisterAction::Decrement),
 
             instructions::LD_aBC_A => self.load_reg_to_mem_at_reg(Register16::BC, Register8::A, RegisterAction::Nothing),
             instructions::LD_aDE_A => self.load_reg_to_mem_at_reg(Register16::DE, Register8::A, RegisterAction::Nothing),
+            instructions::LD_aHL_A => self.load_reg_to_mem_at_reg(Register16::HL, Register8::A, RegisterAction::Nothing),
+            instructions::LD_aHL_B => self.load_reg_to_mem_at_reg(Register16::HL, Register8::B, RegisterAction::Nothing),
+            instructions::LD_aHL_C => self.load_reg_to_mem_at_reg(Register16::HL, Register8::C, RegisterAction::Nothing),
+            instructions::LD_aHL_D => self.load_reg_to_mem_at_reg(Register16::HL, Register8::D, RegisterAction::Nothing),
+            instructions::LD_aHL_E => self.load_reg_to_mem_at_reg(Register16::HL, Register8::E, RegisterAction::Nothing),
+            instructions::LD_aHL_H => self.load_reg_to_mem_at_reg(Register16::HL, Register8::H, RegisterAction::Nothing),
+            instructions::LD_aHL_L => self.load_reg_to_mem_at_reg(Register16::HL, Register8::L, RegisterAction::Nothing),
+
             instructions::LD_aHLp_A => self.load_reg_to_mem_at_reg(Register16::HL, Register8::A, RegisterAction::Increment),
             instructions::LD_aHLm_A => self.load_reg_to_mem_at_reg(Register16::HL, Register8::A, RegisterAction::Decrement),
 
@@ -135,7 +208,7 @@ impl LR35902 {
             instructions::ADD_HL_HL => self.add16(Register16::HL, Register16::HL),
             instructions::ADD_HL_SP => self.add16(Register16::HL, Register16::SP),
 
-            0x40..=0xFF => todo!(),
+            0x80..=0xFF => todo!(),
         };
 
         self.cycle += cycles_passed;
@@ -176,6 +249,12 @@ impl LR35902 {
         let value = self.next_byte();
         self.registers.set8(reg, value);
         2
+    }
+
+    fn load_reg_to_reg(&mut self, dest: Register8, src: Register8) -> u64 {
+        let v = self.registers.get8(src);
+        self.registers.set8(dest, v);
+        1
     }
 
     fn load_reg_to_mem_at_reg(&mut self, dest: Register16, src: Register8, reg_action: RegisterAction) -> u64 {
